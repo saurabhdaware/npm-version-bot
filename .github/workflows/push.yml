@@ -8,7 +8,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Create Version Bump
-        id: hello
         uses: saurabhdaware/npm-version-bot@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
