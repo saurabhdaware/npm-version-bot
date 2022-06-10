@@ -70,6 +70,8 @@ async function action() {
     const {stdout, stderr} = await exec(bumpVersion, {
       cwd: process.env.GITHUB_WORKSPACE,
     });
+
+    console.log({wd: process.env.GITHUB_WORKSPACE});
     if (stdout) console.log(stdout);
     if (stderr) console.log(stderr);
     console.log('Committed version to branch');
