@@ -41,33 +41,34 @@ async function getMergedPullRequest(
 }
 
 async function action() {
-  // const pull = await getMergedPullRequest(
-  //   core.getInput('github_token'),
-  //   github.context.repo.owner,
-  //   github.context.repo.repo,
-  //   github.context.sha
-  // );
+  const pull = await getMergedPullRequest(
+    core.getInput('github_token'),
+    github.context.repo.owner,
+    github.context.repo.repo,
+    github.context.sha
+  );
 
-  // if (!pull) {
-  //   console.log('No Pull Request Found with Same GitHub Commit Id');
-  //   return;
-  // }
+  if (!pull) {
+    console.log('No Pull Request Found with Same GitHub Commit Id');
+    return;
+  }
 
-  // /** @type {'major' | 'minor' | 'patch' | undefined} */
-  // let semverBumpType;
+  /** @type {'major' | 'minor' | 'patch' | undefined} */
+  let semverBumpType;
   
-  // if (pull.labels.includes('major')) {
-  //   semverBumpType = 'major';
-  // } else if (pull.labels.includes('minor')) {
-  //   semverBumpType = 'minor';
-  // } else if (pull.labels.includes('patch')) {
-  //   semverBumpType = 'patch';
-  // }
+  if (pull.labels.includes('major')) {
+    semverBumpType = 'major';
+  } else if (pull.labels.includes('minor')) {
+    semverBumpType = 'minor';
+  } else if (pull.labels.includes('patch')) {
+    semverBumpType = 'patch';
+  }
 
-  const semverBumpType = 'patch';
   if (semverBumpType) {
     const bumpVersion = `
-    npm version patch
+    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    git config user.name "GitHub Actions Bot"
+    npm version ${semverBumpType}
     git push
   `;
 
