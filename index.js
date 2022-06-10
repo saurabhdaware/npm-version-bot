@@ -3,13 +3,16 @@ const github = require('@actions/github');
 const fetch = require('node-fetch');
 
 function getPRNumber() {
-  const commit = github.context.payload.commits[0];
-  const commiter = commit.committer;
-  if (commiter.username === 'web-flow' && commiter.name === 'GitHub') {
-    const [_, prNumber] = /\(#([\d ]*?)\)/g.exec(commit.message);
+  const githubSquashCommit = github.context.payload.commits.find((commit) => {
+    return commit.committer.username === 'web-flow' && commit.commiter.name === 'GitHub'
+  })
+
+  if (githubSquashCommit) {
+    const [_, prNumber] = /\(#([\d ]*?)\)/g.exec(githubSquashCommit.message);
     if (!prNumber) return 1;
     return prNumber;
   }
+  
   return 1;
 }
 
