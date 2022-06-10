@@ -65,7 +65,7 @@ async function action() {
   // }
   const semverBumpType = 'patch'
   if (semverBumpType) {
-    const bumpVersion = `cd .. && npm version ${semverBumpType} && git push origin main`;
+    const bumpVersion = `ls`;
 
     const {stdout, stderr} = await exec(bumpVersion, {
       cwd: process.env.GITHUB_WORKSPACE,
