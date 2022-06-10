@@ -2,6 +2,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const process = require('process');
 
 /**
  * @Credits https://github.com/actions-ecosystem/action-get-merged-pull-request/blob/main/src/main.ts
@@ -40,35 +41,35 @@ async function getMergedPullRequest(
 }
 
 async function action() {
-  const pull = await getMergedPullRequest(
-    core.getInput('github_token'),
-    github.context.repo.owner,
-    github.context.repo.repo,
-    github.context.sha
-  );
+  // const pull = await getMergedPullRequest(
+  //   core.getInput('github_token'),
+  //   github.context.repo.owner,
+  //   github.context.repo.repo,
+  //   github.context.sha
+  // );
 
-  if (!pull) {
-    console.log('No Pull Request Found with Same GitHub Commit Id');
-    return;
-  }
+  // if (!pull) {
+  //   console.log('No Pull Request Found with Same GitHub Commit Id');
+  //   return;
+  // }
 
-  /** @type {'major' | 'minor' | 'patch' | undefined} */
-  let semverBumpType;
+  // /** @type {'major' | 'minor' | 'patch' | undefined} */
+  // let semverBumpType;
   
-  if (pull.labels.includes('major')) {
-    semverBumpType = 'major';
-  } else if (pull.labels.includes('minor')) {
-    semverBumpType = 'minor';
-  } else if (pull.labels.includes('patch')) {
-    semverBumpType = 'patch';
-  }
+  // if (pull.labels.includes('major')) {
+  //   semverBumpType = 'major';
+  // } else if (pull.labels.includes('minor')) {
+  //   semverBumpType = 'minor';
+  // } else if (pull.labels.includes('patch')) {
+  //   semverBumpType = 'patch';
+  // }
+  const semverBumpType = 'patch'
   if (semverBumpType) {
-    const gitSetup = `
-      npm version ${semverBumpType}
-      git push
-    `;
+    const bumpVersion = `npm version ${semverBumpType}\ngit push origin main`;
 
-    const {stdout, stderr} = await exec(gitSetup);
+    const {stdout, stderr} = await exec(bumpVersion, {
+      cwd: process.env.GITHUB_WORKSPACE,
+    });
     if (stdout) console.log(stdout);
     if (stderr) console.log(stderr);
     console.log('Committed version to branch');
