@@ -12,7 +12,7 @@ async function getMergedPullRequest(
   repo,
   sha
 ) {
-  const client = new github.GitHub(githubToken);
+  const client = github.getOctokit(githubToken);
 
   const resp = await client.pulls.list({
     owner,
