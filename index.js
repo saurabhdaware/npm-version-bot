@@ -69,11 +69,11 @@ async function action() {
     git config user.email 41898282+github-actions[bot]@users.noreply.github.com
     git config user.name GitHub Actions Bot
     npm version patch
-    git push https://github.com/saurabhdaware/npm-version-bot main --force
+    git push
   `;
 
     const {stdout, stderr} = await exec(bumpVersion, {
-      cwd: __dirname,
+      cwd: process.env.GITHUB_WORKSPACE,
     });
     if (stdout) console.log(stdout);
     if (stderr) console.log(stderr);
