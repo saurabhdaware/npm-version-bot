@@ -65,13 +65,13 @@ async function action() {
   // }
   const semverBumpType = 'patch'
   if (semverBumpType) {
-    const bumpVersion = `ls`;
+    const bumpVersion = `npm version patch`;
 
     const {stdout, stderr} = await exec(bumpVersion, {
-      cwd: process.env.GITHUB_WORKSPACE,
+      cwd: __dirname,
     });
 
-    console.log({wd: process.env.GITHUB_WORKSPACE});
+    console.log({wd: __dirname});
     if (stdout) console.log(stdout);
     if (stderr) console.log(stderr);
     console.log('Committed version to branch');
