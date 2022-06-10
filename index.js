@@ -65,13 +65,11 @@ async function action() {
   // }
   const semverBumpType = 'patch'
   if (semverBumpType) {
-    const bumpVersion = `npm version patch`;
+    const bumpVersion = `npm version ${semverBumpType}\ngit push origin main`;
 
     const {stdout, stderr} = await exec(bumpVersion, {
       cwd: __dirname,
     });
-
-    console.log({wd: __dirname});
     if (stdout) console.log(stdout);
     if (stderr) console.log(stderr);
     console.log('Committed version to branch');
