@@ -15,8 +15,8 @@ async function getMergedPullRequest(
   const octokit = github.getOctokit(githubToken);
 
   const resp = await octokit.request('GET /repos/{owner}/{repo}/pulls', {
-    owner: 'OWNER',
-    repo: 'REPO',
+    owner,
+    repo,
     sort: 'updated',
     direction: 'desc',
     state: 'closed',
