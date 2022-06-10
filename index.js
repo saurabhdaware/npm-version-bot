@@ -1,10 +1,11 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const fetch = require('node-fetch');
+const exec = util.promisify(require('child_process').exec);
 
 /**
  * @Credits https://github.com/actions-ecosystem/action-get-merged-pull-request/blob/main/src/main.ts
  * 
+ * The code is mostly taken from above action and updated to support newer octokit version
  */
 async function getMergedPullRequest(
   githubToken,
@@ -37,29 +38,6 @@ async function getMergedPullRequest(
   };
 }
 
-
-// function getPRNumber() {
-//   const githubSquashCommit = github.context.payload.commits.find((commit) => {
-//     return commit.committer.username === 'web-flow' && commit.commiter.name === 'GitHub'
-//   })
-
-//   if (githubSquashCommit) {
-//     const [_, prNumber] = /\(#([\d ]*?)\)/g.exec(githubSquashCommit.message);
-//     if (!prNumber) return 1;
-//     return prNumber;
-//   }
-
-//   return 1;
-// }
-
-// async function getLabels(prNumber) {
-//   const repository = github.context.payload.repository;
-//   const ENDPOINT = repository.pulls_url.replace('{/number}', `/${prNumber}`);
-//   const data = await fetch(ENDPOINT).then((res) => res.json());
-//   const labels = data.labels.map((label) => label.name);
-//   return labels;
-// }
-
 async function action() {
   const pull = await getMergedPullRequest(
     core.getInput('github_token'),
@@ -68,22 +46,32 @@ async function action() {
     github.context.sha
   );
 
-  console.log({pull});
+  if (!pull) {
+    console.log('No Pull Request Found with Same GitHub Commit Id');
+    return;
+  }
 
+  /** @type {'major' | 'minor' | 'patch' | undefined} */
+  let semverBumpType;
+  
+  if (pull.labels.includes('major')) {
+    semverBumpType = 'major';
+  } else if (pull.labels.includes('minor')) {
+    semverBumpType = 'minor';
+  } else if (pull.labels.includes('patch')) {
+    semverBumpType = 'patch';
+  }
+  if (semverBumpType) {
+    const gitSetup = `
+      npm version ${semverBumpType}
+      git push
+    `;
 
-  // const mergedPRNumber = getPRNumber();
-  // console.log({mergedPRNumber});
-  // const labels = await getLabels(mergedPRNumber);
-  // console.log({labels});
-
-  // `who-to-greet` input defined in action metadata file
-  const nameToGreet = core.getInput('who-to-greet');
-  console.log(`Hello ${nameToGreet}!`);
-  const time = (new Date()).toTimeString();
-  core.setOutput("time", time);
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
-  console.log(`The event payload: ${payload}`);
+    const {stdout, stderr} = await exec(gitSetup);
+    if (stdout) console.log(stdout);
+    if (stderr) console.log(stderr);
+    console.log('Committed version to branch');
+  }
 }
 
 try {
