@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: saurabhdaware/npm-version-bot@v0.0.2
+        uses: saurabhdaware/npm-version-bot@main
         with:
           who-to-greet: 'Saurabh'
       # Use the output from the `hello` step
