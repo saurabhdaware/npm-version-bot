@@ -66,8 +66,8 @@ async function action() {
   const semverBumpType = 'patch'
   if (semverBumpType) {
     const bumpVersion = `
-    git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-    git config user.name GitHub Actions Bot
+    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    git config user.name "GitHub Actions Bot"
     npm version patch
     git push
   `;
