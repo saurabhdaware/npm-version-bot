@@ -1,11 +1,14 @@
 {
   "name": "npm-version-bot",
-  "version": "1.0.0",
+  "version": "0.0.3",
   "description": "Version the master changes, add changelog",
   "main": "index.js",
   "scripts": {
     "build": "ncc build index.js --license licenses.txt",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prerelease": "npm install",
+    "release": "git tag -m \"Release $npm_package_version\" v$npm_package_version",
+    "postrelease": "git push origin v$npm_package_version"
   },
   "repository": {
     "type": "git",
