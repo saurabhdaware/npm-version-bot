@@ -1,6 +1,6 @@
 {
   "name": "npm-version-bot",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Version the master changes, add changelog",
   "main": "index.js",
   "scripts": {
