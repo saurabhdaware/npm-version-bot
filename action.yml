@@ -1,9 +1,12 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'NPM Version Bot'
+description: 'A bot to bump version based on PR labels'
 inputs:
   github_token:
     description: A GitHub token.
     required: true
+outputs:
+  version:
+    description: 'New version'
 runs:
   using: 'node16'
   main: 'index.js'

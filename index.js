@@ -70,14 +70,16 @@ async function action() {
     git config user.name "GitHub Actions Bot"
     npm version ${semverBumpType}
     git push
-  `;
+    `;
 
     const {stdout, stderr} = await exec(bumpVersion, {
       cwd: process.env.GITHUB_WORKSPACE,
     });
     if (stdout) console.log(stdout);
     if (stderr) console.log(stderr);
-    console.log('Committed version to branch');
+    const newVersion = require(`${process.env.GITHUB_WORKSPACE}/package.json`).version;
+    console.log(`Committed v${newVersion} to branch`);
+    core.setOutput('version', newVersion);
   }
 }
 

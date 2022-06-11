@@ -9,5 +9,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Create Version Bump
         uses: saurabhdaware/npm-version-bot@main
+        id: versionbot
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create GitHub Tag
+        if: ${{ !!steps.versionbot.outputs.version }}
+        run: npm run release
