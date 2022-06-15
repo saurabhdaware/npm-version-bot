@@ -14,4 +14,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Create GitHub Tag
         if: ${{ !!steps.versionbot.outputs.version }}
-        run: npm run release
+        run: npm run push-tag

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "ncc build index.js --license licenses.txt",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "git push origin v$npm_package_version"
+    "push-tag": "git push origin v$npm_package_version"
   },
   "repository": {
     "type": "git",
