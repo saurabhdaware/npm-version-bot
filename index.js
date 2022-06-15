@@ -69,7 +69,7 @@ async function action() {
     git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
     git config user.name "GitHub Actions Bot"
     npm version ${semverBumpType}
-    git push
+    git push origin main --follow-tags
     `;
 
     const {stdout, stderr} = await exec(bumpVersion, {

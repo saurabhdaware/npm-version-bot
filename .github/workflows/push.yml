@@ -11,7 +11,7 @@ jobs:
         uses: saurabhdaware/npm-version-bot@main
         id: versionbot
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create GitHub Tag
+          github_token: ${{ secrets.SAURABH_BOT_TOKEN }}
+      - name: Confirmation
         if: ${{ !!steps.versionbot.outputs.version }}
-        run: npm run push-tag
+        run: echo "Released ${{ steps.versionbot.outputs.version }}"
