@@ -1,4 +1,4 @@
-name: Auto approve
+name: Auto Approve
 
 on:
   pull_request
@@ -6,10 +6,10 @@ on:
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
+    if: github.actor == 'saurabhdaware'
     permissions:
       pull-requests: write
     steps:
     - uses: hmarr/auto-approve-action@v2
-      if: github.actor == 'saurabhdaware'
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
