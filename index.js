@@ -75,8 +75,12 @@ async function action() {
     const {stdout, stderr} = await exec(bumpVersion, {
       cwd: process.env.GITHUB_WORKSPACE,
     });
-    if (stdout) console.log(stdout);
-    if (stderr) console.log(stderr);
+    if (stdout) {
+      console.log(stdout);
+    }
+    if (stderr) {
+      console.log(stderr);
+    }
     const newVersion = require(`${process.env.GITHUB_WORKSPACE}/package.json`).version;
     console.log(`Committed v${newVersion} to branch`);
     core.setOutput('version', newVersion);
