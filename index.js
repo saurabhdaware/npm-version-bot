@@ -66,8 +66,8 @@ async function action() {
 
   if (semverBumpType) {
     const bumpVersion = `
-    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-    git config user.name "GitHub Actions Bot"
+    git config user.email "saurabhdaware99@gmail.com"
+    git config user.name "saurabhdaware"
     npm version ${semverBumpType}
     git push origin main --follow-tags
     `;
