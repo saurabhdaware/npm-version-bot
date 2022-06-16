@@ -9,19 +9,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Create Version Bump
-        uses: saurabhdaware/npm-version-bot@main
-        id: versionbot
-        with:
-          github_token: ${{ secrets.SAURABH_BOT_TOKEN }}
-      - name: Confirmation
-        if: ${{ !!steps.versionbot.outputs.version }}
-        run: echo "Released ${{ steps.versionbot.outputs.version }}"
       - uses: actions/setup-node@v3
         if: ${{ !!steps.versionbot.outputs.version }}
         with:
           node-version: 16.x
+      - name: Create Version Bump
+        uses: saurabhdaware/npm-version-bot@main
+        id: versionbot
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - run: npx changelogithub
         if: ${{ !!steps.versionbot.outputs.version }}
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
