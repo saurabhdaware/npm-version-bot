@@ -1,4 +1,4 @@
-name: Auto Merge
+name: Auto Approve and Merge
 
 on:
   pull_request:
@@ -20,7 +20,18 @@ on:
   status: {}
 
 jobs:
-  automerge:
+  auto-approve:
+    name: Auto Approve
+    runs-on: ubuntu-latest
+    if: github.actor == 'saurabhdaware'
+    permissions:
+      pull-requests: write
+    steps:
+    - uses: hmarr/auto-approve-action@v2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+  auto-merge:
+    name: Auto Merge
     runs-on: ubuntu-latest
     if: github.actor == 'saurabhdaware'
     steps:
@@ -31,3 +42,5 @@ jobs:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           MERGE_METHOD: "squash"
           MERGE_LABELS: ""
+          MERGE_REQUIRED_APPROVALS: 1
+          MERGE_FILTER_AUTHOR: saurabhdaware
