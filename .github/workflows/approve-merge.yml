@@ -27,10 +27,12 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-    - uses: hmarr/auto-approve-action@v2
+    - name: Auto Approve
+      uses: hmarr/auto-approve-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
   auto-merge:
+    needs: auto-approve
     name: Auto Merge
     runs-on: ubuntu-latest
     if: github.actor == 'saurabhdaware'
