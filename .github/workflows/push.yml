@@ -6,7 +6,9 @@ jobs:
     name: Version Bump
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Create Version Bump
         uses: saurabhdaware/npm-version-bot@main
         id: versionbot
@@ -15,3 +17,11 @@ jobs:
       - name: Confirmation
         if: ${{ !!steps.versionbot.outputs.version }}
         run: echo "Released ${{ steps.versionbot.outputs.version }}"
+      - uses: actions/setup-node@v3
+        if: ${{ !!steps.versionbot.outputs.version }}
+        with:
+          node-version: 16.x
+      - run: npx changelogithub
+        if: ${{ !!steps.versionbot.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
