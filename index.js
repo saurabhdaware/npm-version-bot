@@ -4,19 +4,20 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const process = require('process');
 
+const GITHUB_WORKSPACE = process.env.GITHUB_WORKSPACE;
+const GITHUB_TOKEN = core.getInput('github_token');
+const octokit = github.getOctokit(GITHUB_TOKEN);
+const owner = github.context.repo.owner;
+const repo = github.context.repo.repo;
+const sha = github.context.sha;
+
+
 /**
  * @Credits https://github.com/actions-ecosystem/action-get-merged-pull-request/blob/main/src/main.ts
  * 
  * The code is mostly taken from above action and updated to support newer octokit version
  */
-async function getMergedPullRequest(
-  githubToken,
-  owner,
-  repo,
-  sha
-) {
-  const octokit = github.getOctokit(githubToken);
-
+async function getMergedPullRequest() {
   const resp = await octokit.request('GET /repos/{owner}/{repo}/pulls', {
     owner,
     repo,
@@ -41,12 +42,7 @@ async function getMergedPullRequest(
 }
 
 async function action() {
-  const pull = await getMergedPullRequest(
-    core.getInput('github_token'),
-    github.context.repo.owner,
-    github.context.repo.repo,
-    github.context.sha
-  );
+  const pull = await getMergedPullRequest();
 
   if (!pull) {
     console.log('No Pull Request Found with Same GitHub Commit Id');
@@ -73,11 +69,11 @@ async function action() {
     `;
 
     const {stdout, stderr} = await exec(bumpVersion, {
-      cwd: process.env.GITHUB_WORKSPACE,
+      cwd: GITHUB_WORKSPACE,
     });
     if (stdout) console.log(stdout);
     if (stderr) console.log(stderr);
-    const newVersion = require(`${process.env.GITHUB_WORKSPACE}/package.json`).version;
+    const newVersion = require(`${GITHUB_WORKSPACE}/package.json`).version;
     console.log(`Committed v${newVersion} to branch`);
     core.setOutput('version', newVersion);
   }
